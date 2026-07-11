@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>སྦྲུལ — Le Serpent · Astrologie tibétaine</title>
+    <style>
+        :root {
+            --encre:      #1c1a18;
+            --parchemin:  #f7f2e8;
+            --or-pale:    #c8a84b;
+            --or-hover:   rgba(200, 168, 75, 0.22);
+            --or-actif:   rgba(200, 168, 75, 0.45);
+            --craie:      #ffffff;
+            --gris-doux:  #8a7f72;
+            --tooltip-bg: rgba(28, 26, 24, 0.96);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--parchemin);
+            color: var(--encre);
+            min-height: 100vh;
+        }
+        header {
+            background: var(--encre);
+            color: var(--parchemin);
+            padding: 36px 40px 28px;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+        .signe-glyph {
+            font-size: 72px;
+            line-height: 1;
+            color: var(--or-pale);
+            flex-shrink: 0;
+        }
+        header hgroup {
+            border-left: 2px solid var(--or-pale);
+            padding-left: 24px;
+        }
+        header .surtitre {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gris-doux);
+            margin-bottom: 6px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        header h1 {
+            font-size: 38px;
+            font-weight: normal;
+            line-height: 1.1;
+            color: var(--parchemin);
+        }
+        header h1 span.tib {
+            font-size: 28px;
+            color: var(--or-pale);
+            display: block;
+            margin-top: 4px;
+        }
+        main {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+        @media (max-width: 720px) {
+            main { grid-template-columns: 1fr; }
+            header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            header hgroup { border-left: none; border-top: 1px solid var(--or-pale); padding-left: 0; padding-top: 16px; }
+        }
+        .bloc {
+            background: var(--craie);
+            border-radius: 10px;
+            box-shadow: 0 2px 18px rgba(0,0,0,0.07);
+            padding: 32px;
+        }
+        .bloc-titre {
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--gris-doux);
+            font-family: 'Segoe UI', sans-serif;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e8e0d0;
+        }
+        #texte-tibetain {
+            font-size: 22px;
+            line-height: 2.2;
+            color: var(--encre);
+        }
+        .mot {
+            position: relative;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.15s;
+        }
+        .mot:hover, .mot.actif { background: var(--or-hover); }
+        .mot.actif { background: var(--or-actif); outline: 1px solid var(--or-pale); }
+        .mot .tip {
+            visibility: hidden;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(6px);
+            background: var(--tooltip-bg);
+            color: #f8f4ec;
+            font-size: 13px;
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.4;
+            padding: 7px 12px;
+            border-radius: 6px;
+            white-space: normal;
+            max-width: 260px;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 20;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        .mot .tip::after {
+            content: '';
+            position: absolute;
+            top: 100%; left: 50%;
+            margin-left: -5px;
+            border: 5px solid transparent;
+            border-top-color: var(--tooltip-bg);
+        }
+        .mot:hover .tip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        #texte-francais {
+            font-size: 15.5px;
+            line-height: 1.85;
+            color: #2e2a25;
+        }
+        #texte-francais p { margin-bottom: 14px; }
+        #texte-francais p:last-child { margin-bottom: 0; }
+        .section-table { grid-column: 1 / -1; }
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .table-header h2 {
+            font-size: 13px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gris-doux);
+            font-family: 'Segoe UI', sans-serif;
+        }
+        #compteur {
+            font-size: 12px;
+            color: var(--gris-doux);
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0ece2;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        thead th {
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', sans-serif;
+            color: var(--gris-doux);
+            border-bottom: 2px solid #e8e0d0;
+            font-weight: normal;
+        }
+        tbody tr { border-bottom: 1px solid #f0ebe0; transition: background 0.15s; }
+        tbody tr:hover { background: #faf7f0; }
+        tbody tr.surligné { background: var(--or-actif); }
+        td { padding: 9px 14px; vertical-align: middle; }
+        td.tib-cell { font-size: 18px; line-height: 1.6; color: var(--encre); width: 44%; }
+        td.fr-cell { color: #3a3530; width: 56%; }
+        td .num {
+            display: inline-block;
+            width: 22px;
+            color: var(--or-pale);
+            font-size: 11px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .filtre-wrap { margin-bottom: 16px; }
+        #filtre {
+            width: 100%;
+            padding: 9px 14px;
+            border: 1px solid #d8d0c0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--craie);
+            color: var(--encre);
+            outline: none;
+        }
+        #filtre:focus { border-color: var(--or-pale); }
+        #filtre::placeholder { color: #b0a898; }
+        .legende {
+            font-size: 11.5px;
+            color: var(--gris-doux);
+            font-family: 'Segoe UI', sans-serif;
+            margin-top: 14px;
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .legende span { display: flex; align-items: center; gap: 6px; }
+        .legende .puce { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+        .puce-or { background: var(--or-actif); border: 1px solid var(--or-pale); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="signe-glyph">🐍</div>
+    <hgroup>
+        <p class="surtitre">Astrologie tibétaine · Signe n° 6</p>
+        <h1>Le Serpent<span class="tib">སྦྲུལ །</span></h1>
+    </hgroup>
+</header>
+
+<main>
+    <div class="bloc">
+        <p class="bloc-titre">Texte tibétain · བོད་ཡིག</p>
+        <div id="texte-tibetain"></div>
+    </div>
+
+    <div class="bloc">
+        <p class="bloc-titre">Traduction française</p>
+        <div id="texte-francais">
+            <p>De nature, cette personne agit extérieurement de façon droite et correcte dans toutes ses activités. Elle est persévérante et capable d'endurer les difficultés. Cependant, au fond, elle peut avoir des comportements imprévisibles, voire extravagants. Elle possède un esprit très subtil et une grande habileté stratégique, ainsi qu'une <strong>intelligence vive</strong>. Elle aime les arts.</p>
+            <p>Lorsqu'elle rencontre quelqu'un qu'elle aime, son affection peut être ardente comme une flamme. Toutefois, elle est également très sujette au doute et à la jalousie. Malgré cela, elle n'accorde pas toujours une attention suffisante aux relations affectives, ce qui fait qu'elle n'est pas toujours parfaitement constante ou sincère dans ce domaine.</p>
+            <p>Si elle déploie des efforts soutenus et complets, elle pourra obtenir tout ce qu'elle désire : renommée, réputation, richesse et prospérité. Grâce à sa grande intelligence, il lui est conseillé d'agir avec prudence et humilité lorsqu'elle entreprend une activité.</p>
+            <p>D'un autre côté, elle peut aussi posséder un caractère dur et redoutable, capable de devenir nuisible si ses tendances négatives prennent le dessus.</p>
+            <p>Les personnes nées les années du <em>Bœuf</em> (གླང་) et de l'<em>Oiseau / Coq</em> (བྱ་) seront de bons amis ou partenaires.</p>
+            <p>Les métiers liés aux arts et aux activités spécialisées ou nécessitant un talent particulier lui sont particulièrement favorables.</p>
+        </div>
+    </div>
+
+    <div class="bloc section-table">
+        <div class="table-header">
+            <h2>Vocabulaire · ཚིག་མཛོད།</h2>
+            <span id="compteur">— termes</span>
+        </div>
+        <div class="filtre-wrap">
+            <input type="text" id="filtre" placeholder="Filtrer par terme tibétain ou traduction…">
+        </div>
+        <div style="overflow-x:auto;">
+            <table id="tableau-vocab">
+                <thead>
+                    <tr>
+                        <th style="width:3%">#</th>
+                        <th style="width:41%">Tibétain</th>
+                        <th style="width:56%">Français</th>
+                    </tr>
+                </thead>
+                <tbody id="corps-tableau"></tbody>
+            </table>
+        </div>
+        <div class="legende">
+            <span><span class="puce puce-or"></span> terme sélectionné dans le texte</span>
+        </div>
+    </div>
+</main>
+
+<script>
+/* ── VOCABULAIRE ──────────────────────────── */
+const vocab = [
+    ["དྲུག་པ་",                          "sixième (rang, numéro)"],
+    ["སྦྲུལ།",                           "Serpent (signe astrologique tibétain)"],
+    ["རང་གཤིས་",                         "caractère, nature propre, tempérament"],
+    ["ཕྱི་ཚུལ་ནས་",                       "de l'extérieur, en apparence, vu de l'extérieur"],
+    ["བྱ་བ་ཐམས་ཅད་དྲང་པོར་ལས།",          "agit de façon droite et correcte dans toutes ses activités"],
+    ["སྡུག་རུས་ལྡན།",                     "persévérant, endurant, capable de tenir dans les épreuves"],
+    ["དོན་དངོས་སུ་",                      "en réalité, au fond, concrètement"],
+    ["སྨྱོ་སྤྱོད་མཁན་",                    "quelqu'un aux comportements imprévisibles, à tendance excentrique"],
+    ["ཞིག་",                    "un(e), une certaine"],
+    ["ཡིན།",                    "est"],
+    ["བློ་རྩེ་གཉིས་པ་",                   "esprit retors, grande habileté stratégique à double face"],
+    ["ཧ་ཅང་ཆེ།",                         "très grand, excessivement important"],
+    ["བློ་རིག་གསལ།",                     "intelligence vive, esprit clair et perspicace"],
+    ["སྒྱུ་རྩལ་ལ་དགའ།",                  "aimer les arts, avoir de l'attrait pour les arts"],
+    ["རང་དགའ་བའི་མི་",                   "la personne qu'on aime, quelqu'un d'aimé"],
+    ["དང་འཕྲད་ན་",                   "quand elle rencontre"],
+    ["མེ་ལྕེ་ལྟ་བུའི་བརྩེ་དུང་",          "affection ardente comme une flamme"],
+    ["ཐེ་ཚོམ་",                          "doute, hésitation"],
+    ["ཡོད་ཀྱང་",                          "pourtant, cependant"],
+    ["ཕྲག་དོག་",                         "jalousie, envie"],
+    ["འོན་ཀྱང་",                         "cependant, mais, néanmoins"],
+    ["བརྩེ་དུང་ལ་དོ་སྣང་མི་བྱེད་པས་",    "parce qu'elle n'accorde pas suffisamment d'attention aux relations affectives"],
+    ["མི་དྲང་མོ་",                        "pas parfaitement sincère ou constante"],
+    ["མིན།",                        "n'est pas"],
+    ["གལ་ཏེ་",                           "si, à condition que"],
+    ["བརྩོན་འགྲུས་ཕུན་སུམ་ཚོགས་པ་",      "efforts soutenus et complets, diligence exemplaire"],
+    ["ཡོད་ན་",                           "S'il possède, s'il y a"],
+    ["མཚན་སྙན་གྲགས་",                    "renommée, réputation, célébrité"],
+    ["རྒྱུ་འབྱོར་བ་",                       "richesse, prospérité, aisance matérielle"],
+    ["སོགས་",                       "etc."],
+    ["གང་འདོད་དུ་འགྲུབ།",               "tout ce qu'on désire se réalise"],
+    ["བློ་རིག་གསལ་བའི་དབང་གིས་",        "grâce à son intelligence vive, en vertu de sa clarté d'esprit"],
+    ["བྱ་བ་སྒྲུབ་སྐབས་",                 "lorsqu'elle entreprend une activité"],
+    ["སེམས་ཆུང་བྱས་ན་བཟང་།",            "il est bon d'agir avec humilité et prudence"],
+    ["ཕྱོགས་གཞན་ཞིག་ནས་",               "d'un autre côté, par ailleurs"],
+    ["གདུག་རྩུབ་ཆེ་བའི་",               "caractère dur et redoutable"],
+    ["མི་ཉེས་ཅན་",                       "personne nuisible, individu malveillant"],
+    ["གླང་བྱ་གཉིས་གྲོགས་ལ་བཟང་།",      "les personnes du Bœuf et du Coq sont de bons partenaires"],
+    ["བྱ་བ།",                           "activité, travail (terme général)"],
+    ["སྒྱུ་རྩལ་པ་",                       "artiste, professionnel des arts"],
+    ["ཁྱད་པར་ཅན་གྱི་བྱ་བ་དག་བཟང་།",    "les activités spécialisées / nécessitant un talent particulier lui sont favorables"],
+];
+
+/* ── TEXTE SOURCE ─────────────────────────── */
+const texte = `དྲུག་པ་སྦྲུལ། རང་གཤིས་ཕྱི་ཚུལ་ནས་བྱ་བ་ཐམས་ཅད་དྲང་པོར་ལས། སྡུག་རུས་ལྡན། དོན་དངོས་སུ་སྨྱོ་སྤྱོད་མཁན་ཞིག་ཡིན། བློ་རྩེ་གཉིས་པ་ཧ་ཅང་ཆེ། བློ་རིག་གསལ། སྒྱུ་རྩལ་ལ་དགའ། རང་དགའ་བའི་མི་དང་འཕྲད་ན་མེ་ལྕེ་ལྟ་བུའི་བརྩེ་དུང་ཡོད་ཀྱང་ཐེ་ཚོམ་དང་ཕྲག་དོག་ཧ་ཅང་ཆེ། འོན་ཀྱང་བརྩེ་དུང་ལ་དོ་སྣང་མི་བྱེད་པས་མི་དྲང་མོ་ཞིག་མིན། གལ་ཏེ་བརྩོན་འགྲུས་ཕུན་སུམ་ཚོགས་པ་ཡོད་ན་མཚན་སྙན་གྲགས་དང་རྒྱུ་འབྱོར་བ་སོགས་གང་འདོད་དུ་འགྲུབ། བློ་རིག་གསལ་བའི་དབང་གིས་བྱ་བ་སྒྲུབ་སྐབས་སེམས་ཆུང་བྱས་ན་བཟང་། ཕྱོགས་གཞན་ཞིག་ནས་གདུག་རྩུབ་ཆེ་བའི་མི་ཉེས་ཅན་ཞིག་ཀྱང་ཡིན། གླང་བྱ་གཉིས་གྲོགས་ལ་བཟང་། བྱ་བ། སྒྱུ་རྩལ་པ་དང་ཁྱད་པར་ཅན་གྱི་བྱ་བ་དག་བཟང་། །`;
+
+/* ── TABLEAU ──────────────────────────────── */
+const tbody    = document.getElementById('corps-tableau');
+const compteur = document.getElementById('compteur');
+
+function rendreTableau(filtre = '') {
+    tbody.innerHTML = '';
+    const q = filtre.toLowerCase();
+    let visible = 0;
+    vocab.forEach(([tib, fr], i) => {
+        if (q && !tib.includes(filtre) && !fr.toLowerCase().includes(q)) return;
+        visible++;
+        const tr = document.createElement('tr');
+        tr.dataset.index = i;
+        tr.innerHTML = `<td><span class="num">${i + 1}</span></td>` +
+                       `<td class="tib-cell">${tib}</td>` +
+                       `<td class="fr-cell">${fr}</td>`;
+        tbody.appendChild(tr);
+    });
+    compteur.textContent = visible === vocab.length
+        ? `${vocab.length} termes`
+        : `${visible} / ${vocab.length}`;
+}
+
+/* ── TEXTE INTERACTIF (greedy, index original préservé) ── */
+function rendreTexte() {
+    // Association clé → index original dans vocab, puis tri par longueur décroissante
+    const items = vocab
+        .map(([cle], origIdx) => ({ cle, origIdx }))
+        .sort((a, b) => b.cle.length - a.cle.length);
+
+    // Collecte de toutes les occurrences (matching exact)
+    const matches = [];
+    items.forEach(({ cle, origIdx }) => {
+        let pos = texte.indexOf(cle);
+        while (pos !== -1) {
+            matches.push({ start: pos, end: pos + cle.length, origIdx });
+            pos = texte.indexOf(cle, pos + 1);
+        }
+    });
+
+    // Tri par position, puis sélection gloutonne (pas de chevauchement)
+    matches.sort((a, b) =>
+        a.start !== b.start ? a.start - b.start : (b.end - b.start) - (a.end - a.start)
+    );
+    const retenus = [];
+    let curseur = 0;
+    matches.forEach(m => {
+        if (m.start >= curseur) { retenus.push(m); curseur = m.end; }
+    });
+
+    // Construction du HTML
+    let html = '';
+    let idx = 0;
+    retenus.forEach(({ start, end, origIdx }) => {
+        html += esc(texte.slice(idx, start));
+        const fr = vocab[origIdx][1];
+        const segment = texte.slice(start, end);
+        html += `<span class="mot" data-vi="${origIdx}">` +
+                `<span class="tip">${fr}</span>${esc(segment)}</span>`;
+        idx = end;
+    });
+    html += esc(texte.slice(idx));
+    document.getElementById('texte-tibetain').innerHTML = html;
+}
+
+function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ── INTERACTIONS ─────────────────────────── */
+let motActif = null;
+
+document.getElementById('texte-tibetain').addEventListener('click', e => {
+    const el = e.target.closest('.mot');
+    if (!el) return;
+    const vi = parseInt(el.dataset.vi);
+    if (motActif) motActif.classList.remove('actif');
+    if (motActif === el) { motActif = null; surligneLigne(-1); return; }
+    el.classList.add('actif');
+    motActif = el;
+    surligneLigne(vi);
+    scrollVersLigne(vi);
+});
+
+function surligneLigne(vi) {
+    document.querySelectorAll('#corps-tableau tr').forEach(tr => {
+        tr.classList.toggle('surligné', parseInt(tr.dataset.index) === vi);
+    });
+}
+
+function scrollVersLigne(vi) {
+    const tr = tbody.querySelector(`tr[data-index="${vi}"]`);
+    if (tr) tr.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.getElementById('filtre').addEventListener('input', e => {
+    rendreTableau(e.target.value);
+    if (motActif) surligneLigne(parseInt(motActif.dataset.vi));
+});
+
+/* ── INIT ─────────────────────────────────── */
+rendreTexte();
+rendreTableau();
+</script>
+</body>
+</html>
