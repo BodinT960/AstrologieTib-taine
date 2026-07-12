@@ -10,14 +10,11 @@
             --parchemin: #f7f2e8;
             --or-pale:   #c8a84b;
             --or-vif:    #e0b84e;
-            --or-hover:  rgba(200, 168, 75, 0.18);
             --craie:     #ffffff;
             --gris-doux: #8a7f72;
             --gris-leger:#e8e0d0;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Georgia', 'Times New Roman', serif;
             background-color: var(--parchemin);
@@ -32,7 +29,6 @@
             background: var(--encre);
             padding: 44px 40px 36px;
             text-align: center;
-            position: relative;
         }
         .header-ornement {
             color: var(--or-pale);
@@ -43,47 +39,24 @@
             margin-bottom: 18px;
             opacity: 0.7;
         }
-        header h1 {
-            font-size: 42px;
-            font-weight: normal;
-            color: var(--parchemin);
-            line-height: 1.15;
-        }
-        header h1 .tib {
-            display: block;
-            font-size: 30px;
-            color: var(--or-pale);
-            margin-top: 6px;
-        }
-        .filet {
-            width: 80px;
-            height: 1px;
-            background: var(--or-pale);
-            margin: 22px auto 0;
-            opacity: 0.5;
-        }
+        header h1 { font-size: 42px; font-weight: normal; color: var(--parchemin); line-height: 1.15; }
+        header h1 .tib { display: block; font-size: 30px; color: var(--or-pale); margin-top: 6px; }
+        .filet { width: 80px; height: 1px; background: var(--or-pale); margin: 22px auto 0; opacity: 0.5; }
 
         /* ── Sous-titre ── */
-        .intro {
-            text-align: center;
-            padding: 48px 24px 12px;
-        }
+        .intro { text-align: center; padding: 48px 24px 12px; }
         .intro p {
-            font-size: 15px;
-            color: var(--gris-doux);
-            font-family: 'Segoe UI', sans-serif;
-            letter-spacing: 0.5px;
-            max-width: 480px;
-            margin: 0 auto;
-            line-height: 1.7;
+            font-size: 15px; color: var(--gris-doux);
+            font-family: 'Segoe UI', sans-serif; letter-spacing: 0.5px;
+            max-width: 480px; margin: 0 auto; line-height: 1.7;
         }
 
-        /* ── Grille de cartes ── */
+        /* ── Grille ── */
         .grille {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 32px;
+            gap: 28px;
             padding: 40px 32px 80px;
             flex: 1;
         }
@@ -93,11 +66,11 @@
             background: var(--craie);
             border-radius: 14px;
             box-shadow: 0 3px 24px rgba(0,0,0,0.08);
-            width: 280px;
+            width: 248px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 28px 32px;
+            padding: 36px 24px 28px;
             text-decoration: none;
             color: var(--encre);
             position: relative;
@@ -112,99 +85,38 @@
             height: 4px;
             background: linear-gradient(90deg, var(--or-pale), var(--or-vif), var(--or-pale));
         }
-        .carte:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.13);
-        }
-        .carte:hover .btn-entrer {
-            background: var(--encre);
-            color: var(--or-pale);
-            border-color: var(--encre);
-        }
+        .carte:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.13); }
+        .carte:hover .btn-entrer { background: var(--encre); color: var(--or-pale); border-color: var(--encre); }
         .carte:active { transform: translateY(-2px); }
 
         .carte-numero {
-            font-size: 10px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-family: 'Segoe UI', sans-serif;
-            color: var(--or-pale);
-            margin-bottom: 16px;
+            font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+            font-family: 'Segoe UI', sans-serif; color: var(--or-pale); margin-bottom: 14px;
         }
-        .carte-emoji {
-            font-size: 64px;
-            line-height: 1;
-            margin-bottom: 18px;
-            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
-        }
-        .carte-tib {
-            font-size: 28px;
-            color: var(--encre);
-            margin-bottom: 4px;
-            line-height: 1.2;
-        }
-        .carte-fr {
-            font-size: 22px;
-            font-weight: normal;
-            color: var(--encre);
-            margin-bottom: 6px;
-        }
-        .carte-pinyin {
-            font-size: 12px;
-            font-family: 'Segoe UI', sans-serif;
-            color: var(--gris-doux);
-            letter-spacing: 0.5px;
-            margin-bottom: 24px;
-        }
-
-        .separateur {
-            width: 40px;
-            height: 1px;
-            background: var(--gris-leger);
-            margin-bottom: 20px;
-        }
-
+        .carte-emoji { font-size: 58px; line-height: 1; margin-bottom: 16px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1)); }
+        .carte-tib { font-size: 26px; color: var(--encre); margin-bottom: 3px; line-height: 1.2; }
+        .carte-fr { font-size: 20px; font-weight: normal; color: var(--encre); margin-bottom: 5px; }
+        .carte-pinyin { font-size: 11px; font-family: 'Segoe UI', sans-serif; color: var(--gris-doux); letter-spacing: 0.5px; margin-bottom: 20px; }
+        .separateur { width: 36px; height: 1px; background: var(--gris-leger); margin-bottom: 16px; }
         .carte-desc {
-            font-size: 13px;
-            font-family: 'Segoe UI', sans-serif;
-            color: var(--gris-doux);
-            text-align: center;
-            line-height: 1.65;
-            margin-bottom: 28px;
-            min-height: 58px;
+            font-size: 12.5px; font-family: 'Segoe UI', sans-serif; color: var(--gris-doux);
+            text-align: center; line-height: 1.6; margin-bottom: 24px; min-height: 52px;
         }
-
         .btn-entrer {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 11px 26px;
-            border: 1.5px solid var(--or-pale);
-            border-radius: 50px;
-            font-size: 12px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-family: 'Segoe UI', sans-serif;
-            color: var(--encre);
-            background: transparent;
-            transition: all 0.2s ease;
-            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 22px; border: 1.5px solid var(--or-pale); border-radius: 50px;
+            font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+            font-family: 'Segoe UI', sans-serif; color: var(--encre);
+            background: transparent; transition: all 0.2s ease; cursor: pointer;
         }
-        .btn-entrer svg {
-            transition: transform 0.2s ease;
-        }
-        .carte:hover .btn-entrer svg {
-            transform: translateX(4px);
-        }
+        .btn-entrer svg { transition: transform 0.2s ease; }
+        .carte:hover .btn-entrer svg { transform: translateX(4px); }
 
-        /* ── Bandeau bas ── */
+        /* ── Pied de page ── */
         footer {
-            text-align: center;
-            padding: 20px;
-            font-size: 11px;
-            font-family: 'Segoe UI', sans-serif;
-            color: var(--gris-doux);
-            letter-spacing: 0.5px;
+            text-align: center; padding: 20px;
+            font-size: 11px; font-family: 'Segoe UI', sans-serif;
+            color: var(--gris-doux); letter-spacing: 0.5px;
             border-top: 1px solid var(--gris-leger);
         }
 
@@ -212,7 +124,7 @@
             header h1 { font-size: 30px; }
             header h1 .tib { font-size: 22px; }
             .carte { width: 100%; max-width: 320px; }
-            .grille { padding: 32px 20px 60px; gap: 24px; }
+            .grille { padding: 32px 20px 60px; gap: 20px; }
         }
     </style>
 </head>
@@ -220,10 +132,7 @@
 
 <header>
     <p class="header-ornement">རྒྱལ་ལོ་རིག་པ། · Connaissance du calendrier royal</p>
-    <h1>
-        Astrologie tibétaine
-        <span class="tib">བོད་ཀྱི་རྟ་སྐར།</span>
-    </h1>
+    <h1>Astrologie tibétaine<span class="tib">བོད་ཀྱི་རྟ་སྐར།</span></h1>
     <div class="filet"></div>
 </header>
 
@@ -243,11 +152,9 @@
         <p class="carte-pinyin">· 'brug ·</p>
         <div class="separateur"></div>
         <p class="carte-desc">Persévérant, affectueux et intelligent —<br>un idéaliste à la flamme généreuse.</p>
-        <span class="btn-entrer">
-            Ouvrir
+        <span class="btn-entrer">Ouvrir
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5"
-                      stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
     </a>
@@ -261,16 +168,14 @@
         <p class="carte-pinyin">· sbrul ·</p>
         <div class="separateur"></div>
         <p class="carte-desc">Droit en apparence, stratège en profondeur —<br>une flamme ardente sous une surface lisse.</p>
-        <span class="btn-entrer">
-            Ouvrir
+        <span class="btn-entrer">Ouvrir
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5"
-                      stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
     </a>
 
-        <!-- Signe 7 : Cheval -->
+    <!-- Signe 7 : Cheval -->
     <a class="carte" href="cheval_astrologie.html">
         <p class="carte-numero">Signe n° 7</p>
         <div class="carte-emoji">🐴</div>
@@ -279,11 +184,25 @@
         <p class="carte-pinyin">· rta ·</p>
         <div class="separateur"></div>
         <p class="carte-desc">Éloquent, rapide et bienveillant —<br>un caractère solide aux émotions vives.</p>
-        <span class="btn-entrer">
-            Ouvrir
+        <span class="btn-entrer">Ouvrir
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5"
-                      stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </span>
+    </a>
+
+    <!-- Signe 8 : Bélier -->
+    <a class="carte" href="mouton_astrologie.html">
+        <p class="carte-numero">Signe n° 8</p>
+        <div class="carte-emoji">🐑</div>
+        <p class="carte-tib">ལུག</p>
+        <h2 class="carte-fr">Le Mouton</h2>
+        <p class="carte-pinyin">· lug ·</p>
+        <div class="separateur"></div>
+        <p class="carte-desc">Attachant et réfléchi, mais exigeant envers lui-même —<br>un cœur passionné qui grandit avec le temps.</p>
+        <span class="btn-entrer">Ouvrir
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
     </a>
