@@ -20,91 +20,92 @@
             background-color: var(--parchemin);
             color: var(--encre);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
         }
 
         /* ── En-tête ── */
-        header { background: var(--encre); padding: 44px 40px 36px; text-align: center; }
+        header { background: var(--encre); padding: 40px 40px 32px; text-align: center; }
         .header-ornement {
-            color: var(--or-pale); font-size: 13px; letter-spacing: 5px;
+            color: var(--or-pale); font-size: 12px; letter-spacing: 5px;
             text-transform: uppercase; font-family: 'Segoe UI', sans-serif;
-            margin-bottom: 18px; opacity: 0.7;
+            margin-bottom: 16px; opacity: 0.7;
         }
-        header h1 { font-size: 42px; font-weight: normal; color: var(--parchemin); line-height: 1.15; }
-        header h1 .tib { display: block; font-size: 30px; color: var(--or-pale); margin-top: 6px; }
-        .filet { width: 80px; height: 1px; background: var(--or-pale); margin: 22px auto 0; opacity: 0.5; }
+        header h1 { font-size: 40px; font-weight: normal; color: var(--parchemin); line-height: 1.15; }
+        header h1 .tib { display: block; font-size: 28px; color: var(--or-pale); margin-top: 6px; }
+        .filet { width: 72px; height: 1px; background: var(--or-pale); margin: 20px auto 0; opacity: 0.5; }
 
         /* ── Sous-titre ── */
-        .intro { text-align: center; padding: 44px 24px 8px; }
+        .intro { text-align: center; padding: 40px 24px 4px; }
         .intro p {
-            font-size: 15px; color: var(--gris-doux);
-            font-family: 'Segoe UI', sans-serif; letter-spacing: 0.3px;
-            max-width: 520px; margin: 0 auto; line-height: 1.7;
+            font-size: 14.5px; color: var(--gris-doux);
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 500px; margin: 0 auto; line-height: 1.75;
         }
 
         /* ── Grille ── */
         .grille {
             display: flex; flex-wrap: wrap; justify-content: center;
-            gap: 24px; padding: 36px 28px 72px; flex: 1;
+            gap: 20px; padding: 32px 24px 64px; flex: 1;
         }
 
         /* ── Carte ── */
         .carte {
-            background: var(--craie); border-radius: 14px;
-            box-shadow: 0 3px 24px rgba(0,0,0,0.08);
-            width: 220px;
+            background: var(--craie); border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+            width: 200px;
             display: flex; flex-direction: column; align-items: center;
-            padding: 32px 20px 26px;
+            padding: 28px 18px 24px;
             text-decoration: none; color: var(--encre);
             position: relative; overflow: hidden;
-            transition: transform 0.22s ease, box-shadow 0.22s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             border: 1px solid var(--gris-leger);
         }
         .carte::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
             background: linear-gradient(90deg, var(--or-pale), var(--or-vif), var(--or-pale));
         }
-        .carte:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.13); }
+        .carte:hover { transform: translateY(-5px); box-shadow: 0 10px 36px rgba(0,0,0,0.12); }
         .carte:hover .btn-entrer { background: var(--encre); color: var(--or-pale); border-color: var(--encre); }
         .carte:active { transform: translateY(-2px); }
 
         .carte-numero {
-            font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-            font-family: 'Segoe UI', sans-serif; color: var(--or-pale); margin-bottom: 12px;
+            font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+            font-family: 'Segoe UI', sans-serif; color: var(--or-pale); margin-bottom: 11px;
         }
-        .carte-emoji { font-size: 54px; line-height: 1; margin-bottom: 14px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1)); }
-        .carte-tib { font-size: 24px; color: var(--encre); margin-bottom: 2px; line-height: 1.2; }
-        .carte-fr { font-size: 19px; font-weight: normal; color: var(--encre); margin-bottom: 4px; }
-        .carte-pinyin { font-size: 11px; font-family: 'Segoe UI', sans-serif; color: var(--gris-doux); letter-spacing: 0.5px; margin-bottom: 18px; }
-        .separateur { width: 32px; height: 1px; background: var(--gris-leger); margin-bottom: 14px; }
+        .carte-emoji { font-size: 50px; line-height: 1; margin-bottom: 12px; }
+        .carte-tib { font-size: 22px; color: var(--encre); margin-bottom: 2px; }
+        .carte-fr { font-size: 17px; font-weight: normal; color: var(--encre); margin-bottom: 4px; }
+        .carte-pinyin { font-size: 10px; font-family: 'Segoe UI', sans-serif; color: var(--gris-doux); letter-spacing: 0.5px; margin-bottom: 14px; }
+        .separateur { width: 28px; height: 1px; background: var(--gris-leger); margin-bottom: 12px; }
         .carte-desc {
-            font-size: 12px; font-family: 'Segoe UI', sans-serif; color: var(--gris-doux);
-            text-align: center; line-height: 1.6; margin-bottom: 22px; min-height: 50px;
+            font-size: 11.5px; font-family: 'Segoe UI', sans-serif; color: var(--gris-doux);
+            text-align: center; line-height: 1.55; margin-bottom: 18px; min-height: 46px;
         }
         .btn-entrer {
-            display: inline-flex; align-items: center; gap: 7px;
-            padding: 9px 20px; border: 1.5px solid var(--or-pale); border-radius: 50px;
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 18px; border: 1.5px solid var(--or-pale); border-radius: 50px;
             font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
             font-family: 'Segoe UI', sans-serif; color: var(--encre);
-            background: transparent; transition: all 0.2s ease; cursor: pointer;
+            background: transparent; transition: all 0.18s ease; cursor: pointer;
         }
-        .btn-entrer svg { transition: transform 0.2s ease; }
+        .btn-entrer svg { transition: transform 0.18s ease; }
         .carte:hover .btn-entrer svg { transform: translateX(3px); }
 
         /* ── Pied de page ── */
         footer {
-            text-align: center; padding: 18px;
-            font-size: 11px; font-family: 'Segoe UI', sans-serif;
-            color: var(--gris-doux); letter-spacing: 0.4px;
-            border-top: 1px solid var(--gris-leger);
+            text-align: center; padding: 16px;
+            font-size: 10.5px; font-family: 'Segoe UI', sans-serif;
+            color: var(--gris-doux); border-top: 1px solid var(--gris-leger);
         }
 
-        @media (max-width: 640px) {
-            header h1 { font-size: 28px; }
-            header h1 .tib { font-size: 20px; }
-            .carte { width: 100%; max-width: 300px; }
-            .grille { padding: 28px 16px 56px; gap: 18px; }
+        @media (max-width: 680px) {
+            header h1 { font-size: 26px; }
+            header h1 .tib { font-size: 18px; }
+            .carte { width: calc(50% - 12px); min-width: 150px; }
+            .grille { padding: 24px 16px 48px; gap: 14px; }
+        }
+        @media (max-width: 380px) {
+            .carte { width: 100%; max-width: 280px; }
         }
     </style>
 </head>
@@ -123,6 +124,22 @@
 
 <div class="grille">
 
+    <!-- Signe 3 : Tigre -->
+    <a class="carte" href="tigre_astrologie.html">
+        <p class="carte-numero">Signe n° 3</p>
+        <div class="carte-emoji">🐯</div>
+        <p class="carte-tib">སྟག</p>
+        <h2 class="carte-fr">Le Tigre</h2>
+        <p class="carte-pinyin">· stag ·</p>
+        <div class="separateur"></div>
+        <p class="carte-desc">Juste et courageux —<br>une fortune en essor,<br>un cœur généreux.</p>
+        <span class="btn-entrer">Ouvrir
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </span>
+    </a>
+
     <!-- Signe 4 : Lièvre -->
     <a class="carte" href="lievre_astrologie.html">
         <p class="carte-numero">Signe n° 4</p>
@@ -133,7 +150,7 @@
         <div class="separateur"></div>
         <p class="carte-desc">Enthousiaste et pionnier —<br>un idéaliste trop prudent<br>qui grandit en s'ouvrant.</p>
         <span class="btn-entrer">Ouvrir
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
                 <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
@@ -147,9 +164,9 @@
         <h2 class="carte-fr">Le Dragon</h2>
         <p class="carte-pinyin">· 'brug ·</p>
         <div class="separateur"></div>
-        <p class="carte-desc">Persévérant, affectueux<br>et intelligent — un idéaliste<br>à la flamme généreuse.</p>
+        <p class="carte-desc">Persévérant et intelligent —<br>un idéaliste à la<br>flamme généreuse.</p>
         <span class="btn-entrer">Ouvrir
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
                 <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
@@ -165,7 +182,7 @@
         <div class="separateur"></div>
         <p class="carte-desc">Droit en apparence,<br>stratège en profondeur —<br>une flamme sous surface lisse.</p>
         <span class="btn-entrer">Ouvrir
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
                 <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
@@ -179,15 +196,15 @@
         <h2 class="carte-fr">Le Cheval</h2>
         <p class="carte-pinyin">· rta ·</p>
         <div class="separateur"></div>
-        <p class="carte-desc">Éloquent, rapide<br>et bienveillant — un caractère<br>solide aux émotions vives.</p>
+        <p class="carte-desc">Éloquent et bienveillant —<br>un caractère solide<br>aux émotions vives.</p>
         <span class="btn-entrer">Ouvrir
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
                 <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
     </a>
 
-    <!-- Signe 8 : Bélier -->
+    <!-- Signe 8 : Mouton -->
     <a class="carte" href="belier_astrologie.html">
         <p class="carte-numero">Signe n° 8</p>
         <div class="carte-emoji">🐑</div>
@@ -197,7 +214,7 @@
         <div class="separateur"></div>
         <p class="carte-desc">Attachant et réfléchi —<br>un cœur passionné<br>qui grandit avec le temps.</p>
         <span class="btn-entrer">Ouvrir
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
                 <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </span>
