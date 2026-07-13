@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>སྟག — Le Tigre · Astrologie tibétaine</title>
+    <style>
+        :root {
+            --encre:      #1c1a18;
+            --parchemin:  #f7f2e8;
+            --or-pale:    #c8a84b;
+            --or-hover:   rgba(200, 168, 75, 0.22);
+            --or-actif:   rgba(200, 168, 75, 0.45);
+            --craie:      #ffffff;
+            --gris-doux:  #8a7f72;
+            --tooltip-bg: rgba(28, 26, 24, 0.96);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--parchemin);
+            color: var(--encre);
+            min-height: 100vh;
+        }
+        header {
+            background: var(--encre);
+            color: var(--parchemin);
+            padding: 36px 40px 28px;
+            display: flex; align-items: center; gap: 28px;
+        }
+        .signe-glyph { font-size: 72px; line-height: 1; color: var(--or-pale); flex-shrink: 0; }
+        header hgroup { border-left: 2px solid var(--or-pale); padding-left: 24px; }
+        header .surtitre {
+            font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--gris-doux); margin-bottom: 6px; font-family: 'Segoe UI', sans-serif;
+        }
+        header h1 { font-size: 38px; font-weight: normal; line-height: 1.1; color: var(--parchemin); }
+        header h1 span.tib { font-size: 28px; color: var(--or-pale); display: block; margin-top: 4px; }
+        main {
+            max-width: 1060px; margin: 0 auto;
+            padding: 40px 24px 80px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+        }
+        @media (max-width: 720px) {
+            main { grid-template-columns: 1fr; }
+            header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            header hgroup { border-left: none; border-top: 1px solid var(--or-pale); padding-left: 0; padding-top: 16px; }
+        }
+        .bloc {
+            background: var(--craie); border-radius: 10px;
+            box-shadow: 0 2px 18px rgba(0,0,0,0.07); padding: 32px;
+        }
+        .bloc-titre {
+            font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+            color: var(--gris-doux); font-family: 'Segoe UI', sans-serif;
+            margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid #e8e0d0;
+        }
+        #texte-tibetain { font-size: 22px; line-height: 2.2; color: var(--encre); }
+        .mot { position: relative; cursor: pointer; border-radius: 3px; transition: background 0.15s; }
+        .mot:hover, .mot.actif { background: var(--or-hover); }
+        .mot.actif { background: var(--or-actif); outline: 1px solid var(--or-pale); }
+        .mot .tip {
+            visibility: hidden; position: absolute;
+            bottom: calc(100% + 8px); left: 50%;
+            transform: translateX(-50%) translateY(6px);
+            background: var(--tooltip-bg); color: #f8f4ec;
+            font-size: 13px; font-family: 'Segoe UI', sans-serif;
+            line-height: 1.4; padding: 7px 12px; border-radius: 6px;
+            max-width: 260px; white-space: normal; text-align: center;
+            pointer-events: none; opacity: 0; transition: all 0.2s ease;
+            z-index: 20; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        .mot .tip::after {
+            content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+            border: 5px solid transparent; border-top-color: var(--tooltip-bg);
+        }
+        .mot:hover .tip { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
+        #texte-francais { font-size: 15.5px; line-height: 1.85; color: #2e2a25; }
+        #texte-francais p { margin-bottom: 14px; }
+        #texte-francais p:last-child { margin-bottom: 0; }
+        .section-table { grid-column: 1 / -1; }
+        .table-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .table-header h2 {
+            font-size: 13px; font-weight: normal; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--gris-doux); font-family: 'Segoe UI', sans-serif;
+        }
+        #compteur {
+            font-size: 12px; color: var(--gris-doux); font-family: 'Segoe UI', sans-serif;
+            background: #f0ece2; padding: 3px 10px; border-radius: 20px;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        thead th {
+            text-align: left; padding: 10px 14px; font-size: 10px; letter-spacing: 2px;
+            text-transform: uppercase; font-family: 'Segoe UI', sans-serif;
+            color: var(--gris-doux); border-bottom: 2px solid #e8e0d0; font-weight: normal;
+        }
+        tbody tr { border-bottom: 1px solid #f0ebe0; transition: background 0.15s; }
+        tbody tr:hover { background: #faf7f0; }
+        tbody tr.surligné { background: var(--or-actif); }
+        td { padding: 9px 14px; vertical-align: middle; }
+        td.tib-cell { font-size: 18px; line-height: 1.6; color: var(--encre); width: 44%; }
+        td.fr-cell { color: #3a3530; width: 56%; }
+        td .num { display: inline-block; width: 22px; color: var(--or-pale); font-size: 11px; font-family: 'Segoe UI', sans-serif; }
+        .filtre-wrap { margin-bottom: 16px; }
+        #filtre {
+            width: 100%; padding: 9px 14px; border: 1px solid #d8d0c0; border-radius: 6px;
+            font-size: 14px; font-family: 'Segoe UI', sans-serif;
+            background: var(--craie); color: var(--encre); outline: none;
+        }
+        #filtre:focus { border-color: var(--or-pale); }
+        #filtre::placeholder { color: #b0a898; }
+        .legende {
+            font-size: 11.5px; color: var(--gris-doux); font-family: 'Segoe UI', sans-serif;
+            margin-top: 14px; display: flex; gap: 18px; flex-wrap: wrap;
+        }
+        .legende span { display: flex; align-items: center; gap: 6px; }
+        .legende .puce { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+        .puce-or { background: var(--or-actif); border: 1px solid var(--or-pale); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="signe-glyph">🐯</div>
+    <hgroup>
+        <p class="surtitre">Astrologie tibétaine · Signe n° 3</p>
+        <h1>Le Tigre<span class="tib">སྟག །</span></h1>
+    </hgroup>
+</header>
+
+<main>
+    <div class="bloc">
+        <p class="bloc-titre">Texte tibétain · བོད་ཡིག</p>
+        <div id="texte-tibetain"></div>
+    </div>
+
+    <div class="bloc">
+        <p class="bloc-titre">Traduction française</p>
+        <div id="texte-francais">
+            <p>Cette personne attache une grande importance à l'honnêteté, à la justice et au respect des principes. Bien qu'elle puisse paraître rude à l'extérieur, elle possède un bon cœur.</p>
+            <p>Si la personne est une femme, son caractère est quelque peu différent : elle est particulièrement créative, dynamique et pleine d'enthousiasme. Elle attire naturellement l'affection et la sympathie des autres. En général, elle réussit dans les entreprises qu'elle entreprend.</p>
+            <p>Dans l'ensemble, sa vie est marquée par de nombreux déplacements et une activité soutenue. Parmi les douze signes du zodiaque, celui-ci est considéré comme l'un des plus favorables. Sa fortune (<em>རླུང་རྟ་</em>, lungta) est en plein essor.</p>
+            <p>Cependant, son caractère manque parfois de stabilité. Pour réussir, elle doit accomplir toutes ses entreprises avec persévérance, courage et endurance.</p>
+            <p>Les personnes nées les années du <em>Cheval</em> (རྟ་), du <em>Chien</em> (ཁྱི་) et du <em>Cochon</em> (ཕག་) seront de bons amis ou partenaires.</p>
+            <p>Professions favorables : <em>administrateur ou gestionnaire</em>, <em>employé ou fonctionnaire</em>, <em>haut responsable ou dirigeant</em>.</p>
+        </div>
+    </div>
+
+    <div class="bloc section-table">
+        <div class="table-header">
+            <h2>Vocabulaire · ཚིག་མཛོད།</h2>
+            <span id="compteur">— termes</span>
+        </div>
+        <div class="filtre-wrap">
+            <input type="text" id="filtre" placeholder="Filtrer par terme tibétain ou traduction…">
+        </div>
+        <div style="overflow-x:auto;">
+            <table id="tableau-vocab">
+                <thead>
+                    <tr>
+                        <th style="width:3%">#</th>
+                        <th style="width:41%">Tibétain</th>
+                        <th style="width:56%">Français</th>
+                    </tr>
+                </thead>
+                <tbody id="corps-tableau"></tbody>
+            </table>
+        </div>
+        <div class="legende">
+            <span><span class="puce puce-or"></span> terme sélectionné dans le texte</span>
+        </div>
+    </div>
+</main>
+
+<script>
+/* ── VOCABULAIRE ──────────────────────────── */
+const vocab = [
+    ["གསུམ་པ་",                                            "troisième (rang, numéro)"],
+    ["སྟག",                                                "Tigre (signe astrologique tibétain)"],
+    ["རང་གཤིས་དྲང་བདེན་དང་གནས་ལུགས་གཙོ་བོར་བྱེད།",     "attache une grande importance à l'honnêteté, à la justice et aux principes"],
+    ["ཕྱི་ཚུལ་ནས་རྩུབ་ཀྱང་བསམ་པ་བཟང་།",                 "apparence rude mais bon cœur"],
+    ["བུད་མེད་ཡིན་ན་དེ་ལས་ལྡོག་སྟེ་",                    "si c'est une femme, c'est différent / en revanche"],
+    ["གསར་གཏོད་ཀྱི་ནུས་པ་ལྡན།",                           "être doté d'un grand esprit de création ou d'innovation"],
+    ["སྤྲོ་སྣང་ཅན་ཞིག་ཡིན།",                              "enthousiaste, optimiste, plein d'entrain"],
+    ["མི་གཞན་གྱིས་རང་དགར་བརྩེ་དུང་སྟེར།",                "les autres lui témoignent spontanément de l'affection"],
+    ["བྱ་བ་ཐམས་ཅད་འགྲུབ།",                                "elle réussit dans toutes les entreprises"],
+    ["འགུལ་སྐྱོད་ཐམས་ཅད་སྤྱིར་བཏང་ཞིག་ཡིན།",             "vie marquée par de nombreux déplacements et une activité soutenue"],
+    ["ལོ་འཁོར་བཅུ་གཉིས་ནང་དུ་ཆེས་བཟང་ཤོས་ཡིན།",         "parmi les douze signes du zodiaque, l'un des plus favorables"],
+    ["རླུང་རྟ་དར།",                                        "la fortune (རླུང་རྟ་, lungta) est en plein essor"],
+    ["རང་བཞིན་བརྟན་པོ་མིན།",                              "son caractère manque de stabilité"],
+    ["བྱ་བ་ཐམས་ཅད་དཀའ་སྤྱད་སྡུག་རུས་ཀྱིས་སྒྲུབ་ན་བཟང་།", "favorable d'accomplir toutes ses entreprises avec persévérance et endurance"],
+    ["རྟ་",                                                "Cheval (signe astrologique, partenaire)"],
+    ["ཁྱི་",                                                "Chien (signe astrologique, partenaire)"],
+    ["ཕག་",                                                "Cochon (signe astrologique, partenaire)"],
+    ["གསུམ་གྲོགས་ལ་བཟང་།",                                "ces trois signes sont de bons partenaires"],
+    ["བྱ་བ།",                                              "activité, travail (terme général)"],
+    ["སྤྱི་གཉེར་།",                                         "administrateur ou gestionnaire"],
+    ["ལས་བྱེད་པ།",                                         "employé, fonctionnaire"],
+    ["ཆེས་མཐོ་བའི་སྤྱི་གཉེར་བ་བཅས་ལ་བཟང་།",              "haut responsable ou dirigeant : ces professions sont favorables"],
+];
+
+/* ── TEXTE SOURCE ─────────────────────────── */
+const texte = `གསུམ་པ་སྟག རང་གཤིས་དྲང་བདེན་དང་གནས་ལུགས་གཙོ་བོར་བྱེད། ཕྱི་ཚུལ་ནས་རྩུབ་ཀྱང་བསམ་པ་བཟང་། བུད་མེད་ཡིན་ན་དེ་ལས་ལྡོག་སྟེ་གསར་གཏོད་ཀྱི་ནུས་པ་ལྡན། སྤྲོ་སྣང་ཅན་ཞིག་ཡིན། མི་གཞན་གྱིས་རང་དགར་བརྩེ་དུང་སྟེར། བྱ་བ་ཐམས་ཅད་འགྲུབ། འགུལ་སྐྱོད་ཐམས་ཅད་སྤྱིར་བཏང་ཞིག་ཡིན། ལོ་འཁོར་བཅུ་གཉིས་ནང་དུ་ཆེས་བཟང་ཤོས་ཡིན། རླུང་རྟ་དར། རང་བཞིན་བརྟན་པོ་མིན། བྱ་བ་ཐམས་ཅད་དཀའ་སྤྱད་སྡུག་རུས་ཀྱིས་སྒྲུབ་ན་བཟང་། རྟ་ཁྱི་ཕག་གསུམ་གྲོགས་ལ་བཟང་། བྱ་བ། སྤྱི་གཉེར་། ལས་བྱེད་པ། ཆེས་མཐོ་བའི་སྤྱི་གཉེར་བ་བཅས་ལ་བཟང་།`;
+
+/* ── TABLEAU ──────────────────────────────── */
+const tbody    = document.getElementById('corps-tableau');
+const compteur = document.getElementById('compteur');
+
+function rendreTableau(filtre = '') {
+    tbody.innerHTML = '';
+    const q = filtre.toLowerCase();
+    let visible = 0;
+    vocab.forEach(([tib, fr], i) => {
+        if (q && !tib.includes(filtre) && !fr.toLowerCase().includes(q)) return;
+        visible++;
+        const tr = document.createElement('tr');
+        tr.dataset.index = i;
+        tr.innerHTML = `<td><span class="num">${i + 1}</span></td>` +
+                       `<td class="tib-cell">${tib}</td>` +
+                       `<td class="fr-cell">${fr}</td>`;
+        tbody.appendChild(tr);
+    });
+    compteur.textContent = visible === vocab.length
+        ? `${vocab.length} termes`
+        : `${visible} / ${vocab.length}`;
+}
+
+/* ── TEXTE INTERACTIF (greedy, index original préservé) ── */
+function rendreTexte() {
+    const items = vocab
+        .map(([cle], origIdx) => ({ cle, origIdx }))
+        .sort((a, b) => b.cle.length - a.cle.length);
+
+    const matches = [];
+    items.forEach(({ cle, origIdx }) => {
+        let pos = texte.indexOf(cle);
+        while (pos !== -1) {
+            matches.push({ start: pos, end: pos + cle.length, origIdx });
+            pos = texte.indexOf(cle, pos + 1);
+        }
+    });
+
+    matches.sort((a, b) =>
+        a.start !== b.start ? a.start - b.start : (b.end - b.start) - (a.end - a.start)
+    );
+    const retenus = [];
+    let curseur = 0;
+    matches.forEach(m => {
+        if (m.start >= curseur) { retenus.push(m); curseur = m.end; }
+    });
+
+    let html = '';
+    let idx = 0;
+    retenus.forEach(({ start, end, origIdx }) => {
+        html += esc(texte.slice(idx, start));
+        const fr = vocab[origIdx][1];
+        html += `<span class="mot" data-vi="${origIdx}">` +
+                `<span class="tip">${fr}</span>${esc(texte.slice(start, end))}</span>`;
+        idx = end;
+    });
+    html += esc(texte.slice(idx));
+    document.getElementById('texte-tibetain').innerHTML = html;
+}
+
+function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ── INTERACTIONS ─────────────────────────── */
+let motActif = null;
+
+document.getElementById('texte-tibetain').addEventListener('click', e => {
+    const el = e.target.closest('.mot');
+    if (!el) return;
+    const vi = parseInt(el.dataset.vi);
+    if (motActif) motActif.classList.remove('actif');
+    if (motActif === el) { motActif = null; surligneLigne(-1); return; }
+    el.classList.add('actif');
+    motActif = el;
+    surligneLigne(vi);
+    scrollVersLigne(vi);
+});
+
+function surligneLigne(vi) {
+    document.querySelectorAll('#corps-tableau tr').forEach(tr => {
+        tr.classList.toggle('surligné', parseInt(tr.dataset.index) === vi);
+    });
+}
+
+function scrollVersLigne(vi) {
+    const tr = tbody.querySelector(`tr[data-index="${vi}"]`);
+    if (tr) tr.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.getElementById('filtre').addEventListener('input', e => {
+    rendreTableau(e.target.value);
+    if (motActif) surligneLigne(parseInt(motActif.dataset.vi));
+});
+
+/* ── INIT ─────────────────────────────────── */
+rendreTexte();
+rendreTableau();
+</script>
+</body>
+</html>
