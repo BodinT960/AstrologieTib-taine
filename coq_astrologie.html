@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>བྱ — Le Coq · Astrologie tibétaine</title>
+    <style>
+        :root {
+            --encre:      #1c1a18;
+            --parchemin:  #f7f2e8;
+            --or-pale:    #c8a84b;
+            --or-hover:   rgba(200, 168, 75, 0.22);
+            --or-actif:   rgba(200, 168, 75, 0.45);
+            --craie:      #ffffff;
+            --gris-doux:  #8a7f72;
+            --tooltip-bg: rgba(28, 26, 24, 0.96);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--parchemin);
+            color: var(--encre);
+            min-height: 100vh;
+        }
+        header {
+            background: var(--encre); color: var(--parchemin);
+            padding: 36px 40px 28px;
+            display: flex; align-items: center; gap: 28px;
+        }
+        .signe-glyph { font-size: 72px; line-height: 1; color: var(--or-pale); flex-shrink: 0; }
+        header hgroup { border-left: 2px solid var(--or-pale); padding-left: 24px; }
+        header .surtitre {
+            font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--gris-doux); margin-bottom: 6px; font-family: 'Segoe UI', sans-serif;
+        }
+        header h1 { font-size: 38px; font-weight: normal; line-height: 1.1; color: var(--parchemin); }
+        header h1 span.tib { font-size: 28px; color: var(--or-pale); display: block; margin-top: 4px; }
+        main {
+            max-width: 1060px; margin: 0 auto;
+            padding: 40px 24px 80px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+        }
+        @media (max-width: 720px) {
+            main { grid-template-columns: 1fr; }
+            header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            header hgroup { border-left: none; border-top: 1px solid var(--or-pale); padding-left: 0; padding-top: 16px; }
+        }
+        .bloc {
+            background: var(--craie); border-radius: 10px;
+            box-shadow: 0 2px 18px rgba(0,0,0,0.07); padding: 32px;
+        }
+        .bloc-titre {
+            font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+            color: var(--gris-doux); font-family: 'Segoe UI', sans-serif;
+            margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid #e8e0d0;
+        }
+        #texte-tibetain { font-size: 22px; line-height: 2.2; color: var(--encre); }
+        .mot { position: relative; cursor: pointer; border-radius: 3px; transition: background 0.15s; }
+        .mot:hover, .mot.actif { background: var(--or-hover); }
+        .mot.actif { background: var(--or-actif); outline: 1px solid var(--or-pale); }
+        .mot .tip {
+            visibility: hidden; position: absolute;
+            bottom: calc(100% + 8px); left: 50%;
+            transform: translateX(-50%) translateY(6px);
+            background: var(--tooltip-bg); color: #f8f4ec;
+            font-size: 13px; font-family: 'Segoe UI', sans-serif;
+            line-height: 1.4; padding: 7px 12px; border-radius: 6px;
+            max-width: 260px; white-space: normal; text-align: center;
+            pointer-events: none; opacity: 0; transition: all 0.2s ease;
+            z-index: 20; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        .mot .tip::after {
+            content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+            border: 5px solid transparent; border-top-color: var(--tooltip-bg);
+        }
+        .mot:hover .tip { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
+        #texte-francais { font-size: 15.5px; line-height: 1.85; color: #2e2a25; }
+        #texte-francais p { margin-bottom: 14px; }
+        #texte-francais p:last-child { margin-bottom: 0; }
+        .section-table { grid-column: 1 / -1; }
+        .table-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .table-header h2 {
+            font-size: 13px; font-weight: normal; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--gris-doux); font-family: 'Segoe UI', sans-serif;
+        }
+        #compteur {
+            font-size: 12px; color: var(--gris-doux); font-family: 'Segoe UI', sans-serif;
+            background: #f0ece2; padding: 3px 10px; border-radius: 20px;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        thead th {
+            text-align: left; padding: 10px 14px; font-size: 10px; letter-spacing: 2px;
+            text-transform: uppercase; font-family: 'Segoe UI', sans-serif;
+            color: var(--gris-doux); border-bottom: 2px solid #e8e0d0; font-weight: normal;
+        }
+        tbody tr { border-bottom: 1px solid #f0ebe0; transition: background 0.15s; }
+        tbody tr:hover { background: #faf7f0; }
+        tbody tr.surligné { background: var(--or-actif); }
+        td { padding: 9px 14px; vertical-align: middle; }
+        td.tib-cell { font-size: 18px; line-height: 1.6; color: var(--encre); width: 44%; }
+        td.fr-cell { color: #3a3530; width: 56%; }
+        td .num { display: inline-block; width: 22px; color: var(--or-pale); font-size: 11px; font-family: 'Segoe UI', sans-serif; }
+        .filtre-wrap { margin-bottom: 16px; }
+        #filtre {
+            width: 100%; padding: 9px 14px; border: 1px solid #d8d0c0; border-radius: 6px;
+            font-size: 14px; font-family: 'Segoe UI', sans-serif;
+            background: var(--craie); color: var(--encre); outline: none;
+        }
+        #filtre:focus { border-color: var(--or-pale); }
+        #filtre::placeholder { color: #b0a898; }
+        .legende {
+            font-size: 11.5px; color: var(--gris-doux); font-family: 'Segoe UI', sans-serif;
+            margin-top: 14px; display: flex; gap: 18px; flex-wrap: wrap;
+        }
+        .legende span { display: flex; align-items: center; gap: 6px; }
+        .legende .puce { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+        .puce-or { background: var(--or-actif); border: 1px solid var(--or-pale); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="signe-glyph">🐓</div>
+    <hgroup>
+        <p class="surtitre">Astrologie tibétaine · Signe n° 10</p>
+        <h1>Le Coq<span class="tib">བྱ །</span></h1>
+    </hgroup>
+</header>
+
+<main>
+    <div class="bloc">
+        <p class="bloc-titre">Texte tibétain · བོད་ཡིག</p>
+        <div id="texte-tibetain"></div>
+    </div>
+
+    <div class="bloc">
+        <p class="bloc-titre">Traduction française</p>
+        <div id="texte-francais">
+            <p>Le natif du Coq possède un grand talent pour les relations humaines et la communication. Il sait exprimer ses idées aussi bien par l'écriture que par la parole, et il est capable d'analyser aussi bien les détails que les grandes lignes d'une situation. Il inspire facilement confiance et sympathie. Dépourvu d'arrogance, il fait preuve de sérieux et d'application.</p>
+            <p>Il se préoccupe beaucoup de son travail. Il comprend les liens entre les idées intérieures et les réalités matérielles, ainsi que la manière dont elles s'influencent mutuellement. Il apprécie les divertissements, et il est fortement attiré par les activités modernes, au point d'avoir parfois du mal à s'en détacher.</p>
+            <p>En amour, ses sentiments, aussi bien extérieurs qu'intérieurs, peuvent manquer de sincérité. Il sait parler avec élégance et charme, mais demeure très hésitant. Il voit loin et possède une vision à long terme.</p>
+            <p>Cependant, si la personne qu'il aime ne lui accorde pas sa confiance, leur relation peut se briser très rapidement — comme un objet tranché en deux par une lame parfaitement aiguisée.</p>
+            <p>Il s'adapte facilement à tous les environnements. Il bénéficie généralement d'une bonne situation matérielle, et les entreprises qu'il entreprend ont de bonnes chances de réussir. Toutefois, sa richesse n'est pas toujours stable.</p>
+            <p>Il a une haute opinion de lui-même et aime observer ou surveiller les autres. Il lui arrive de parler avec précipitation. Il aime également se mêler des affaires qui ne le concernent pas directement.</p>
+            <p>Les personnes nées les années du <em>Buffle</em> (གླང་), du <em>Cheval</em> (རྟ་) et du <em>Serpent</em> (སྦྲུལ་) seront de bons amis ou partenaires.</p>
+            <p>Professions favorables : toutes les <em>activités indépendantes</em> exercées à son propre compte.</p>
+        </div>
+    </div>
+
+    <div class="bloc section-table">
+        <div class="table-header">
+            <h2>Vocabulaire · ཚིག་མཛོད།</h2>
+            <span id="compteur">— termes</span>
+        </div>
+        <div class="filtre-wrap">
+            <input type="text" id="filtre" placeholder="Filtrer par terme tibétain ou traduction…">
+        </div>
+        <div style="overflow-x:auto;">
+            <table id="tableau-vocab">
+                <thead>
+                    <tr>
+                        <th style="width:3%">#</th>
+                        <th style="width:41%">Tibétain</th>
+                        <th style="width:56%">Français</th>
+                    </tr>
+                </thead>
+                <tbody id="corps-tableau"></tbody>
+            </table>
+        </div>
+        <div class="legende">
+            <span><span class="puce puce-or"></span> terme sélectionné dans le texte</span>
+        </div>
+    </div>
+</main>
+
+<script>
+/* ── VOCABULAIRE ──────────────────────────── */
+const vocab = [
+    ["བཅུ་བ་",                                                                    "dixième (rang, numéro)"],
+    ["བྱ།",                                                                       "Coq (signe astrologique tibétain)"],
+    ["མཚམས་སྦྱོར་ལ་མཁས།",                                                       "excellent dans les relations humaines, doué pour la communication"],
+    ["ཡིག་རིགས་དང་སྐད་རིགས་སོགས་ཀྱི་སྒོ་ནས་བསམ་ཚུལ་བརྗོད་པའི་ནུས་པ་ཡོད།",    "sait exprimer ses idées par l'écriture comme par la parole"],
+    ["དོན་གྱི་ཕྲ་རགས་འབྱེད།",                                                   "capable d'analyser aussi bien les détails que les grandes lignes"],
+    ["གཞན་ལ་ཡིད་འོང་དུ་བལྟ།",                                                   "inspire facilement confiance et sympathie"],
+    ["ང་རྒྱལ་མེད་ལ་ནན་ཏན་ཡིན།",                                                 "dépourvu d'arrogance, fait preuve de sérieux et d'application"],
+    ["བྱ་བར་སེམས་ཁྲལ་ཆེ།",                                                      "se préoccupe beaucoup de son travail"],
+    ["ནང་བསམ་པའི་འདུ་ཤེས་དང་ཕྱི་དངོས་པོའི་དཔལ་འབྱོར་གྱི་འབྲེལ་ཚུལ་ཤེས།",     "comprend les liens entre les idées intérieures et les réalités matérielles"],
+    ["སྤྲོ་སྣང་ལ་དགའ།",                                                          "apprécie les divertissements"],
+    ["དེང་རབས་ཀྱི་བྱ་བར་ཧ་ཅང་དགའ་བས་དེ་ཕྱོགས་སུ་འཁོར་བ་ལ་རང་དབང་མེད།",      "fortement attiré par les activités modernes, du mal à s'en détacher"],
+    ["བརྩེ་དུང་ཕྱི་ནང་གཉིས་ཀ་རྫུན་ཡིན།",                                       "ses sentiments amoureux peuvent manquer de sincérité"],
+    ["ཚིག་ཡག་པོའི་སྒོ་ནས་བཤད།",                                                "sait parler avec élégance et charme"],
+    ["ཐེ་ཚོམ་ཧ་ཅང་ཆེ།",                                                         "très hésitant"],
+    ["མིག་རྒྱང་རིང་།",                                                           "voit loin, possède une vision à long terme"],
+    ["འོན་ཀྱང་དགའ་གྲོགས་དེས་རང་ལ་བློ་མ་གཏད་ན་",                               "cependant, si la personne aimée ne lui accorde pas sa confiance"],
+    ["དུས་ཡུན་ཐུང་ངུའི་ནང་རལ་གྲི་རྣོ་བ་ཞིག་གིས་དངོས་པོ་ཞིག་དུམ་བུ་གཉིས་སུ་བགོས་པ་ལྟ་བུ་ཡིན།", "la relation peut se briser très vite, comme tranché en deux par une lame aiguisée"],
+    ["གནས་གང་དུ་སོང་ཡང་བདེ།",                                                  "s'adapte facilement à tous les environnements"],
+    ["རྒྱུ་འབྱོར་ལོངས་སྤྱོད་བཟང་།",                                             "bonne situation matérielle"],
+    ["བྱ་བ་མཐའ་དག་འགྲུབ།",                                                     "les entreprises qu'il entreprend ont de bonnes chances de réussir"],
+    ["འོན་ཀྱང་ནོར་རྟག་ནས་མི་འདུག",                                             "toutefois, sa richesse n'est pas toujours stable"],
+    ["རང་མཐོང་ཆེ།",                                                             "haute opinion de lui-même"],
+    ["གཞན་ལ་ལྟ་རྟོག་བྱེད་པར་དགའ།",                                             "aime observer ou surveiller les autres"],
+    ["སྐད་ཆ་རྡབ་རྡིབ་བཤད་པ་མང་།",                                              "parle parfois avec précipitation ou de manière impulsive"],
+    ["རང་མི་འབྲེལ་བའི་བྱ་བའི་ནང་དུ་བཞུགས་རྒྱུར་དགའ།",                        "aime se mêler des affaires qui ne le concernent pas directement"],
+    ["གླང་རྟ་སྦྲུལ་གསུམ་གྲོགས་ལ་བཟང་།",                                       "le Buffle, le Cheval et le Serpent sont de bons partenaires"],
+    ["བྱ་བ།",                                                                    "activité, travail (terme général)"],
+    ["རང་དོན་གྱི་བྱ་བ་ཐམས་ཅད་བཟང་།",                                          "toutes les activités à son propre compte sont favorables"],
+];
+
+/* ── TEXTE SOURCE ─────────────────────────── */
+/* Sauts de colonne retirés : དངོས་ པོ → དངོས་པོ ; ཧ་ཅང་ དགའ → ཧ་ཅང་དགའ ; གྲོགས་ལ་ བཟང་ → གྲོགས་ལ་བཟང་ */
+const texte = `བཅུ་བ་བྱ། མཚམས་སྦྱོར་ལ་མཁས། ཡིག་རིགས་དང་སྐད་རིགས་སོགས་ཀྱི་སྒོ་ནས་བསམ་ཚུལ་བརྗོད་པའི་ནུས་པ་ཡོད། དོན་གྱི་ཕྲ་རགས་འབྱེད། གཞན་ལ་ཡིད་འོང་དུ་བལྟ། ང་རྒྱལ་མེད་ལ་ནན་ཏན་ཡིན། བྱ་བར་སེམས་ཁྲལ་ཆེ། ནང་བསམ་པའི་འདུ་ཤེས་དང་ཕྱི་དངོས་པོའི་དཔལ་འབྱོར་གྱི་འབྲེལ་ཚུལ་ཤེས། སྤྲོ་སྣང་ལ་དགའ། དེང་རབས་ཀྱི་བྱ་བར་ཧ་ཅང་དགའ་བས་དེ་ཕྱོགས་སུ་འཁོར་བ་ལ་རང་དབང་མེད། བརྩེ་དུང་ཕྱི་ནང་གཉིས་ཀ་རྫུན་ཡིན། ཚིག་ཡག་པོའི་སྒོ་ནས་བཤད། ཐེ་ཚོམ་ཧ་ཅང་ཆེ། མིག་རྒྱང་རིང་། འོན་ཀྱང་དགའ་གྲོགས་དེས་རང་ལ་བློ་མ་གཏད་ན་དུས་ཡུན་ཐུང་ངུའི་ནང་རལ་གྲི་རྣོ་བ་ཞིག་གིས་དངོས་པོ་ཞིག་དུམ་བུ་གཉིས་སུ་བགོས་པ་ལྟ་བུ་ཡིན། གནས་གང་དུ་སོང་ཡང་བདེ། རྒྱུ་འབྱོར་ལོངས་སྤྱོད་བཟང་། བྱ་བ་མཐའ་དག་འགྲུབ། འོན་ཀྱང་ནོར་རྟག་ནས་མི་འདུག རང་མཐོང་ཆེ། གཞན་ལ་ལྟ་རྟོག་བྱེད་པར་དགའ། སྐད་ཆ་རྡབ་རྡིབ་བཤད་པ་མང་། རང་མི་འབྲེལ་བའི་བྱ་བའི་ནང་དུ་བཞུགས་རྒྱུར་དགའ། གླང་རྟ་སྦྲུལ་གསུམ་གྲོགས་ལ་བཟང་། བྱ་བ། རང་དོན་གྱི་བྱ་བ་ཐམས་ཅད་བཟང་།།`;
+
+/* ── TABLEAU ──────────────────────────────── */
+const tbody    = document.getElementById('corps-tableau');
+const compteur = document.getElementById('compteur');
+
+function rendreTableau(filtre = '') {
+    tbody.innerHTML = '';
+    const q = filtre.toLowerCase();
+    let visible = 0;
+    vocab.forEach(([tib, fr], i) => {
+        if (q && !tib.includes(filtre) && !fr.toLowerCase().includes(q)) return;
+        visible++;
+        const tr = document.createElement('tr');
+        tr.dataset.index = i;
+        tr.innerHTML = `<td><span class="num">${i + 1}</span></td>` +
+                       `<td class="tib-cell">${tib}</td>` +
+                       `<td class="fr-cell">${fr}</td>`;
+        tbody.appendChild(tr);
+    });
+    compteur.textContent = visible === vocab.length
+        ? `${vocab.length} termes`
+        : `${visible} / ${vocab.length}`;
+}
+
+/* ── TEXTE INTERACTIF (greedy, index original préservé) ── */
+function rendreTexte() {
+    const items = vocab
+        .map(([cle], origIdx) => ({ cle, origIdx }))
+        .sort((a, b) => b.cle.length - a.cle.length);
+
+    const matches = [];
+    items.forEach(({ cle, origIdx }) => {
+        let pos = texte.indexOf(cle);
+        while (pos !== -1) {
+            matches.push({ start: pos, end: pos + cle.length, origIdx });
+            pos = texte.indexOf(cle, pos + 1);
+        }
+    });
+
+    matches.sort((a, b) =>
+        a.start !== b.start ? a.start - b.start : (b.end - b.start) - (a.end - a.start)
+    );
+    const retenus = [];
+    let curseur = 0;
+    matches.forEach(m => {
+        if (m.start >= curseur) { retenus.push(m); curseur = m.end; }
+    });
+
+    let html = '', idx = 0;
+    retenus.forEach(({ start, end, origIdx }) => {
+        html += esc(texte.slice(idx, start));
+        const fr = vocab[origIdx][1];
+        html += `<span class="mot" data-vi="${origIdx}">` +
+                `<span class="tip">${fr}</span>${esc(texte.slice(start, end))}</span>`;
+        idx = end;
+    });
+    html += esc(texte.slice(idx));
+    document.getElementById('texte-tibetain').innerHTML = html;
+}
+
+function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ── INTERACTIONS ─────────────────────────── */
+let motActif = null;
+
+document.getElementById('texte-tibetain').addEventListener('click', e => {
+    const el = e.target.closest('.mot');
+    if (!el) return;
+    const vi = parseInt(el.dataset.vi);
+    if (motActif) motActif.classList.remove('actif');
+    if (motActif === el) { motActif = null; surligneLigne(-1); return; }
+    el.classList.add('actif');
+    motActif = el;
+    surligneLigne(vi);
+    scrollVersLigne(vi);
+});
+
+function surligneLigne(vi) {
+    document.querySelectorAll('#corps-tableau tr').forEach(tr => {
+        tr.classList.toggle('surligné', parseInt(tr.dataset.index) === vi);
+    });
+}
+
+function scrollVersLigne(vi) {
+    const tr = tbody.querySelector(`tr[data-index="${vi}"]`);
+    if (tr) tr.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.getElementById('filtre').addEventListener('input', e => {
+    rendreTableau(e.target.value);
+    if (motActif) surligneLigne(parseInt(motActif.dataset.vi));
+});
+
+/* ── INIT ─────────────────────────────────── */
+rendreTexte();
+rendreTableau();
+</script>
+</body>
+</html>
