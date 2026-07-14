@@ -42,23 +42,29 @@
             max-width: 460px; margin: 0 auto; line-height: 1.75;
         }
 
-        /* ── Grille ── */
+        /* ── Grille (CSS Grid Responsive) ── */
         .grille {
-            display: flex; flex-wrap: wrap; justify-content: center;
-            gap: 16px; padding: 24px 18px 56px; flex: 1;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* 6 colonnes sur grand écran (idéal pour 12 signes) */
+            gap: 16px;
+            padding: 24px 18px 56px;
+            max-width: 1140px; /* Limite la largeur maximale pour éviter l'éparpillement sur écran ultra-large */
+            margin: 0 auto;    /* Centre la grille horizontalement */
+            width: 100%;
         }
 
         /* ── Carte ── */
         .carte {
             background: var(--craie); border-radius: 11px;
             box-shadow: 0 2px 14px rgba(0,0,0,0.07);
-            width: 172px;
+            /* Retrait de width: 172px car la grille gère dynamiquement la largeur */
             display: flex; flex-direction: column; align-items: center;
             padding: 22px 14px 20px;
             text-decoration: none; color: var(--encre);
             position: relative; overflow: hidden;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             border: 1px solid var(--gris-leger);
+            height: 100%; /* Force toutes les cartes d'une ligne à s'aligner sur la hauteur de la plus grande */
         }
         .carte::before {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
@@ -77,11 +83,14 @@
         .carte-fr { font-size: 15px; font-weight: normal; color: var(--encre); margin-bottom: 3px; }
         .carte-pinyin { font-size: 9.5px; font-family: 'Segoe UI', sans-serif; color: var(--gris-doux); letter-spacing: 0.4px; margin-bottom: 11px; }
         .separateur { width: 24px; height: 1px; background: var(--gris-leger); margin-bottom: 10px; }
+        
         .carte-desc {
             font-size: 10.5px; font-family: 'Segoe UI', sans-serif; color: var(--gris-doux);
-            text-align: center; line-height: 1.5; margin-bottom: 14px; min-height: 42px;
+            text-align: center; line-height: 1.5; margin-bottom: 14px;
+            /* Retrait du min-height, la flexbox gère la hauteur */
         }
         .btn-entrer {
+            margin-top: auto; /* Force le bouton à se positionner tout en bas de la carte */
             display: inline-flex; align-items: center; gap: 5px;
             padding: 6px 14px; border: 1.5px solid var(--or-pale); border-radius: 50px;
             font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase;
@@ -96,14 +105,31 @@
             text-align: center; padding: 14px;
             font-size: 10px; font-family: 'Segoe UI', sans-serif;
             color: var(--gris-doux); border-top: 1px solid var(--gris-leger);
+            margin-top: auto; /* Repousse le footer vers le bas si le contenu est court */
         }
 
-        @media (max-width: 720px) {
-            .carte { width: calc(50% - 10px); min-width: 144px; }
-            .grille { padding: 20px 14px 44px; gap: 12px; }
+        /* ── Media Queries Responsive de la Grille ── */
+        @media (max-width: 1024px) {
+            .grille {
+                grid-template-columns: repeat(4, 1fr); /* 4 colonnes sur tablette paysage */
+            }
         }
-        @media (max-width: 360px) {
-            .carte { width: 100%; max-width: 260px; }
+        @media (max-width: 768px) {
+            .grille {
+                grid-template-columns: repeat(3, 1fr); /* 3 colonnes sur tablette portrait */
+            }
+        }
+        @media (max-width: 480px) {
+            .grille {
+                grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur smartphone */
+                gap: 12px;
+                padding: 20px 14px 44px;
+            }
+        }
+        @media (max-width: 340px) {
+            .grille {
+                grid-template-columns: 1fr; /* 1 colonne sur tout petit écran */
+            }
         }
     </style>
 </head>
